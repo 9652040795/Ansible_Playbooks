@@ -1,0 +1,62 @@
+---                                                                                                                                                                                             
+ - hosts: dev                                                                                                                                                                                   
+   become: yes                                                                                                                                                                                  
+   tasks:                                                                                                                                                                                       
+    - name: Installing Java                                                                                                                                                                     
+      yum:                                                                                                                                                                                      
+       name: java-1.8.0-openjdk.x86_64                                                                                                                                                                     
+       state: present                                                                                                                                                                           
+                                                                                                                                                                                                
+    - name: create nexus group                                                                                                                                                                  
+      group:                                                                                                                                                                                    
+       name: nexus                                                                                                                                                                              
+                                                                                                                                                                                                
+    - name: create nexus user                                                                                                                                                                   
+      user:                                                                                                                                                                                     
+       name: nexus                                                                                                                                                                              
+       group: nexus                                                                                                                                                                             
+                                                                                                                                                                                                
+    - name: download nexus                                                                                                                                                                      
+      get_url:                                                                                                                                                                                  
+       url: http://download.sonatype.com/nexus/3/nexus-3.16.1-02-unix.tar.gz                                                                                                                    
+       dest: /opt                                                                                                                                                                
+                                                                                                                                                                                                
+    - name: unarchive the nexus tar file                                                                                                                                                        
+      unarchive:                                                                                                                                                                                
+       src: /opt/nexus-3.16.1-02-unix.tar.gz                                                                                                                                     
+       dest: /opt/                                                                                                                                                              
+       remote_src: yes
+                                                                                                                                                                                                
+    - name: Setting run_as_user="nexus"                                                                                                                                                         
+      lineinfile:                                                                                                                                                                               
+         path: /opt/nexus-3.16.1-02/bin/nexus.rc                                                                                                                                 
+         regexp: '^run'                                                                                                                                                                         
+         line: run_as_user="root"                                                                                                                                                               
+                                                                                                                                                                                                
+    - name: creating symbolic link                                                                                                                                                              
+      file: src=/opt/nexus-3.16.1-02/bin/nexus dest=/etc/init.d/nexus state=link   
+
+    - name: nexus port change 8081 to 19090
+      replace:
+       regexp: 8081
+       replace: '19090'    
+       path: /opt/sonatype-work/nexus3/etc/nexus.properties
+      tags:
+      - nex
+    - name: change port no. in application-port
+      lineinfile:
+         line: application-port=19090
+         path: /opt/sonatype-work/nexus3/etc/nexus.properties     
+      tags:
+      - port                                                                                       
+                                                                                                                                                                                                
+    - name: start nexus                                                                                                                                                                         
+      shell: cd /opt/nexus-3.16.1-02/bin && ./nexus start                                          
+      tags:
+      - start                                                                                            
+                                                                                                                                                                                                
+    - name: know the status of nexus                                                                                                                                                            
+      shell: ps aux | grep -i nexus                                                                                                                                                             
+      register: out                                                                                                                                                                             
+    - debug:                                                                                                                                                                                    
+        var: out                              

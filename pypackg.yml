@@ -1,0 +1,11 @@
+---
+ - hosts: dev
+   tasks:
+   - name: install pip
+     easy_install:
+       name: pip
+       state: latest     
+   - name: pippakg install
+     pip:
+       name: bottle
+       state: present

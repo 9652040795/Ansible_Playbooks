@@ -1,0 +1,6 @@
+---
+ - hosts: dev
+   tasks:
+   - name: "fetch"
+     fetch: src=/root/ansible-modules/Newfolder/file3.txt dest=/root/myansible
+       

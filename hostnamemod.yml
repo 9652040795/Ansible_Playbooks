@@ -1,0 +1,6 @@
+---
+ - hosts: dev
+   tasks:
+   - name: hostname
+     hostname:
+       name: 18.222.200.61

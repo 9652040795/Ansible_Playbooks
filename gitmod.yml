@@ -1,0 +1,58 @@
+---
+ - hosts: dev
+   tasks:
+   - name: git install
+     yum: 
+       name: git 
+       state: present
+     tags:
+     - one
+
+   - name: create directory
+     file: path=/opt/gitansiblepro state=directory
+     tags:
+     - two
+
+   - name: git init
+     command: git init /opt/gitansiblepro
+     tags:
+     - three
+   - name: file2.txt modifying
+     copy: content="hello hellow one my dear comreds sahoindian" dest=/opt/gitansiblepro/file2.txt
+
+   - name: create file inside /opt/mygitprojectpro
+     file: path=/opt/gitansiblepro/file2.txt state=touch
+     tags:
+     - four
+
+   - name: git config username
+     git_config:
+       name: user.name
+       scope: global
+       value: 'dileep454'
+
+   - name: git config email
+     git_config:
+       name: user.email
+       scope: global
+       value: 'dileep.thati@gmail.com'
+
+   - name: git add file and commit
+     shell: cd /opt/gitansiblepro && git add . && git commit -m "commit two"
+     tags:
+     - five
+
+#   - name: git remote remove
+#     shell: cd /opt/gitansiblepro && git remote remove origin
+#     tags:
+#     - rmorigin
+ 
+   - name: git remote add
+     shell: cd /opt/gitansiblepro && git remote add origin git@github.com:dileep454/GitAns.git
+     tags:
+     - six
+
+   - name: git push
+     shell: cd /opt/gitansiblepro && git push -u origin master
+     tags:
+     - seven  

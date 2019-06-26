@@ -1,0 +1,6 @@
+---
+ http_port: 18080
+ https_port: 18083
+ user_name: tomcat
+ pass_word: tomcat123
+ role_name: admin

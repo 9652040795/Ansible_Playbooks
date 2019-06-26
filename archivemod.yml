@@ -1,0 +1,10 @@
+---
+ - hosts: dev
+   tasks:
+   - name: Ansible zip directory example
+     archive: 
+      path: /root/ansible-modules/folder
+      dest: /root/ansible-modules/folder.zip
+      format: zip
+     
+ 

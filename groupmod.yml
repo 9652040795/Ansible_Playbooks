@@ -1,0 +1,7 @@
+---
+ - hosts: dev
+   tasks:
+   - name: groupadd
+     group:
+       name: devgroup
+       state: present

@@ -1,0 +1,5 @@
+---
+ - hosts: dev
+   tasks: 
+   - name:
+     file: path=/root/ansible-modules/newfolder state=directory

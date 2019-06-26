@@ -1,0 +1,36 @@
+---
+ - name: download tomcat
+   copy: src=/root/myansible/apache-tomcat-8.5.41.tar.gz dest=/opt 
+ - name: extract tomcat
+   unarchive:
+    src: /opt/apache-tomcat-8.5.41.tar.gz
+    dest: /opt
+    remote_src: yes
+ - name: start tomcat
+   command: cd /opt/apache-tomcat-8.5.41/bin/ && ./startup.sh 
+
+ - name: server.xml copy in template
+   fetch:
+    src: /opt/apache-tomcat-8.5.41/conf/server.xml
+    dest: /root/myansible/tomcat_role/templates
+   tags:
+    - one
+ - name: templates
+   template: src=server.xml dest=/opt/apache-tomcat-8.5.41/conf/server.xml
+   tags:
+   - two
+
+ - name: tomcat-users.xml copy in template
+   fetch:
+    src: /opt/apache-tomcat-8.5.41/conf/tomcat-users.xml
+    dest: /root/myansible/tomcat_role/templates
+   tags:
+    - three
+
+ - name: templates
+   template: src=tomcat-users.xml dest=/opt/apache-tomcat-8.5.41/conf/tomcat-users.xml
+   tags:
+   - four
+ 
+ - name: tomcat start
+   command: nohup /opt/apache-tomcat-8.5.41/bin/startup.sh

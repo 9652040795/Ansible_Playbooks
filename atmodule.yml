@@ -1,0 +1,8 @@
+---
+ - hosts: dev
+   tasks: 
+   - name: Schedule a command to execute in 5 minutes as root
+     at:
+       command: ls -lrt
+       count: 2
+       units: minutes

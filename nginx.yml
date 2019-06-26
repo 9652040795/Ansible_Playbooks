@@ -1,0 +1,53 @@
+---
+ - hosts: dev
+   tasks:
+   - name: epel-release install
+     shell: yum install epel-release -y   
+
+   - name: install nginx
+     yum: name=nginx state=latest
+   
+#   - name: nginx port change to 8085
+#     replace:
+#      regexp: 80
+#      replace: '8085'
+#      path: /etc/nginx/nginx.conf
+#     tags:
+#     - port
+   
+   - name: create two directories in /var/www
+     file: path=/var/www/testing1.com state=directory
+     tags:
+     - dir1
+   - name: create two directories in /var/www
+     file: path=/var/www/testing2.com state=directory
+     tags:
+     - dir2
+   
+   - name: create directory inside testing1.com
+     file: path=/var/www/testing1.com/public_html state=directory
+   - name: create directory inside testing2.com
+     file: path=/var/www/testing2.com/public_html state=directory
+   
+   - name: create index.html inside public_html
+     file: path=/var/www/testing1.com/public_html/index.html state=touch
+   - name: create index.html inside public_html
+     file: path=/var/www/testing2.com/public_html/index.html state=touch
+   
+   - name: add data into index.html
+     copy: content="This is First Domain" dest=/var/www/testing1.com/public_html/index.html
+   - name: add data into index.html
+     copy: content="This is second Domain" dest=/var/www/testing2.com/public_html/index.html
+
+   - name: create configuration files in /etc/nginx
+     file: path=/etc/nginx/site-available state=directory
+   - name: create file inside site-available
+     file: path=/etc/nginx/site-available/testing1.com.conf testing2.com.conf state=touch
+   
+
+
+
+
+     
+      
+       

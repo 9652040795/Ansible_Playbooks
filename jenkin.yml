@@ -1,0 +1,36 @@
+---
+ - hosts: dev
+   tasks:
+   - name: install wget
+     yum: name=wget state=present
+   - name: install jenkins repo
+     command: wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+     dest: /opt
+     tags:
+     - one
+   - name: rpm --import
+     command: rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+     tags:
+     - two
+   - name: install jenkins
+     yum: name=jenkins state=present
+     tags:
+     - three
+
+   - name: changing jenkins port number
+     replace:
+      regexp: 1118080
+      replace: '18080'
+      path: /etc/sysconfig/jenkins
+     tags:
+     - five
+
+   - name: start jenkins
+     service: name=jenkins state=restarted
+     register: out
+     tags:
+     - six
+
+   - debug: var=out
+     tags:
+     - seven

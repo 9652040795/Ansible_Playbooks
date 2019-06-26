@@ -1,0 +1,42 @@
+---
+ - hosts: dev
+   vars:
+     root_db_password: Password123
+   tasks:
+   - name: download mysql community repo
+     get_url:
+       url: http://repo.mysql.com/mysql-community-release-el7-7.noarch.rpm
+       dest: /tmp	
+     tags:
+     - one
+   - name: install mysql community repo
+     command: /usr/bin/rpm -ivh /tmp/mysql-community-release-el7-7.noarch.rpm
+     tags:
+     - two
+   - name: install mysql server
+     yum: name=mysql-server state=present
+     tags:
+     - three
+   - name: 
+     yum: name=mysql-python state=present
+     tags:
+     - four
+   - name: start mysql and enable
+     service: name=mysqld state=started enabled=yes
+     tags:
+     - start
+   - name: remove test db if exist
+     mysql_db: name=test state=absent
+     tags:
+     - absent
+   - name: remove all anonymous user accounts
+     mysql_user: name=host_all=yes state=absent
+     #- name: output ansible_hostname
+     #debug: msg="hostname is {{ansible_hostname}}”
+   - name: change root password
+     mysql_user: name=root host={{item}} password={{root_db_password}}
+     with_items:
+        – “{{ansible_hostname}}”
+        – 127.0.0.1
+        – ::1
+        – localhost

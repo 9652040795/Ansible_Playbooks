@@ -1,0 +1,6 @@
+---
+ - hosts: dev
+   tasks:
+   - name: "command"
+     command: cat /etc/hosts
+

@@ -1,0 +1,11 @@
+---
+ - hosts: dev
+   tasks:
+   - name: clone git repo
+     git:
+       repo: ssh://github.com/9652040795/Nexus_pro.git
+       dest: /root/clone
+       version: master
+       accept_hostkey: yes
+       key_file: /root/.ssh/id_rsa
+     

@@ -1,0 +1,5 @@
+---
+ - hosts: dev
+   tasks:
+   - name: copyfile to node
+     copy: src=/root/myansible/file5.txt dest=/root/ansible-module

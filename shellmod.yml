@@ -1,0 +1,5 @@
+---
+ - hosts: dev
+   tasks:
+   - name: "shell module"
+     shell: ls -lart

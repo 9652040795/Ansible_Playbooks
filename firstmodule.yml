@@ -1,0 +1,8 @@
+---
+ - hosts: dev
+   tasks:
+   - name: first task
+     shell: /bin/echo hello world
+   - name: second task
+     command: ls -lart
+

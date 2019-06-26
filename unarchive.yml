@@ -1,0 +1,6 @@
+---
+ - hosts: dev
+   tasks:
+   - name: unarchive
+     unarchive: src=/root/ansible-modules/folder.zip dest=/root/ansible-modules/folder
+     remote_src: yes
